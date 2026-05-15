@@ -33,7 +33,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/orders" element={<OrderList />} />
             <Route path="/customers" element={<Customer />} />
-            <Route path="/orders/:id" element={<ProductDetail />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
           </Route>
 
           {/* Layout Auth (Tanpa Sidebar) */}

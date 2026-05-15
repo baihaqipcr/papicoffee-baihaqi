@@ -1,56 +1,66 @@
-import PageHeader from '../components/PageHeader'
+/**
+ * OrderList.jsx — Coffee Shop Theme Version
+ */
 
-/* ── Constants & Styles ── */
+import PageHeader from '../components/PageHeader'
+import { Link } from 'react-router-dom'
+
 const ORDERS = [
-  { id: '#ORD-001', customer: 'Jons Sena', item: 'Pistachio Latte', qty: 2, total: 'Rp 85.000', status: 'Delivered', date: '12 Jan 2025', avatar: 'jons' },
-  { id: '#ORD-002', customer: 'Sofia Amalia', item: 'Caramel Latte', qty: 1, total: 'Rp 45.000', status: 'On Process', date: '12 Jan 2025', avatar: 'sofia' },
-  { id: '#ORD-003', customer: 'Budi Santoso', item: 'Kopapi Susu', qty: 3, total: 'Rp 120.000', status: 'Delivered', date: '11 Jan 2025', avatar: 'budi' },
-  { id: '#ORD-004', customer: 'Anandreansyah', item: 'Machiatto', qty: 1, total: 'Rp 75.000', status: 'Cancelled', date: '11 Jan 2025', avatar: 'anand' },
-  { id: '#ORD-005', customer: 'Rina Kusuma', item: 'Matcha Latte XL', qty: 2, total: 'Rp 56.000', status: 'On Process', date: '10 Jan 2025', avatar: 'rina' },
-  { id: '#ORD-006', customer: 'Doni Prasetyo', item: 'Vanilla Latte', qty: 4, total: 'Rp 96.000', status: 'Delivered', date: '10 Jan 2025', avatar: 'doni' },
-  { id: '#ORD-007', customer: 'Mega Wulandari', item: 'Red Velvet Frappuccino', qty: 1, total: 'Rp 65.000', status: 'Delivered', date: '09 Jan 2025', avatar: 'mega' },
-  { id: '#ORD-008', customer: 'Fajar Hidayat', item: 'Hazelnut Latte', qty: 2, total: 'Rp 78.000', status: 'Cancelled', date: '09 Jan 2025', avatar: 'fajar' },
+  { id: 1, displayId: '#ORD-001', customer: 'Jons Sena',      item: 'Pistachio Latte',        qty: 2, total: 'Rp 85.000',  status: 'Delivered',  date: '12 Jan 2025', avatar: 'jons' },
+  { id: 2, displayId: '#ORD-002', customer: 'Sofia Amalia',   item: 'Caramel Latte',          qty: 1, total: 'Rp 45.000',  status: 'On Process', date: '12 Jan 2025', avatar: 'sofia' },
+  { id: 3, displayId: '#ORD-003', customer: 'Budi Santoso',   item: 'Kopapi Susu',            qty: 3, total: 'Rp 120.000', status: 'Delivered',  date: '11 Jan 2025', avatar: 'budi' },
+  { id: 4, displayId: '#ORD-004', customer: 'Anandreansyah',  item: 'Macchiato',              qty: 1, total: 'Rp 75.000',  status: 'Cancelled',  date: '11 Jan 2025', avatar: 'anand' },
+  { id: 5, displayId: '#ORD-005', customer: 'Rina Kusuma',    item: 'Matcha Latte XL',        qty: 2, total: 'Rp 56.000',  status: 'On Process', date: '10 Jan 2025', avatar: 'rina' },
+  { id: 6, displayId: '#ORD-006', customer: 'Doni Prasetyo',  item: 'Vanilla Latte',          qty: 4, total: 'Rp 96.000',  status: 'Delivered',  date: '10 Jan 2025', avatar: 'doni' },
+  { id: 7, displayId: '#ORD-007', customer: 'Mega Wulandari', item: 'Red Velvet Frappuccino', qty: 1, total: 'Rp 65.000',  status: 'Delivered',  date: '09 Jan 2025', avatar: 'mega' },
 ]
 
 const STATUS_STYLE = {
-  'Delivered': { dot: 'bg-emerald-500', text: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-100' },
-  'On Process': { dot: 'bg-amber-500', text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-100' },
-  'Cancelled': { dot: 'bg-stone-400', text: 'text-stone-600', bg: 'bg-stone-50', border: 'border-stone-100' },
+  Delivered: {
+    dot: 'bg-emerald-500',
+    text: 'text-emerald-700',
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-100',
+  },
+
+  'On Process': {
+    dot: 'bg-amber-500',
+    text: 'text-amber-700',
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+  },
+
+  Cancelled: {
+    dot: 'bg-stone-400',
+    text: 'text-stone-500',
+    bg: 'bg-stone-100',
+    border: 'border-stone-200',
+  },
 }
 
-const HOVER_CARD = "transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-900/5";
-
-/* ── Sub-Components ── */
 function StatusBadge({ status }) {
-  const s = STATUS_STYLE[status] || STATUS_STYLE['On Process']
+  const s = STATUS_STYLE[status]
+
   return (
-    <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full border ${s.text} ${s.bg} ${s.border} shadow-sm`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${s.dot} animate-pulse`} />
+    <span
+      className={`
+        inline-flex items-center gap-1.5
+        px-3 py-1 rounded-full border
+        text-[11px] font-semibold
+        ${s.text} ${s.bg} ${s.border}
+      `}
+    >
+      <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
       {status}
     </span>
   )
 }
 
-function OrderSummaryCard({ label, value, change, up, color, bg, icon }) {
-  return (
-    <div className={`bg-white ${HOVER_CARD} rounded-[2rem] p-6 border border-amber-50/50 flex items-center gap-5`}>
-      <div className={`w-14 h-14 ${bg} rounded-2xl flex items-center justify-center text-2xl shadow-inner`}>
-        {icon}
-      </div>
-      <div>
-        <p className={`text-2xl font-black ${color}`}>{value}</p>
-        <p className="text-xs text-stone-400 font-bold uppercase tracking-tight">{label}</p>
-        <p className={`text-[10px] font-bold mt-1 px-2 py-0.5 rounded-md inline-block ${up ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-400'}`}>
-          {up ? '↑' : '↓'} {change}
-        </p>
-      </div>
-    </div>
-  )
-}
-
 export default function OrderList() {
   return (
-    <div className="space-y-8 bg-[#faf8f5] p-2 min-h-screen">
+    <div className="space-y-6">
+
+      {/* Header */}
       <PageHeader
         title="Daftar Pesanan Papi Coffee"
         subtitle="Pantau dan siapkan kopi terbaik untuk pelangganmu hari ini."
@@ -59,107 +69,352 @@ export default function OrderList() {
         filterSub="Januari 2025"
       />
 
-      {/* Summary Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <OrderSummaryCard label="Total Pesanan" value="357" change="4.4%" up={true} color="text-stone-800" bg="bg-stone-100" icon="📦" />
-        <OrderSummaryCard label="Sedang Diseduh" value="48" change="1.2%" up={true} color="text-amber-700" bg="bg-amber-100" icon="☕" />
-        <OrderSummaryCard label="Batal Hari Ini" value="12" change="2.1%" up={false} color="text-stone-500" bg="bg-stone-200/50" icon="🚫" />
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+        {[
+          {
+            label: 'TOTAL PESANAN',
+            value: '357',
+            growth: '↑ 4.4%',
+            color: 'text-[#78350f]',
+            bg: 'bg-[#fef3c7]',
+            icon: '📦',
+            growthColor: 'text-emerald-500',
+          },
+
+          {
+            label: 'SEDANG DISEDUH',
+            value: '48',
+            growth: '↑ 1.2%',
+            color: 'text-[#b45309]',
+            bg: 'bg-[#fde68a]',
+            icon: '☕',
+            growthColor: 'text-emerald-500',
+          },
+
+          {
+            label: 'BATAL HARI INI',
+            value: '12',
+            growth: '↓ 2.1%',
+            color: 'text-stone-500',
+            bg: 'bg-stone-100',
+            icon: '🚫',
+            growthColor: 'text-red-400',
+          },
+        ].map((card, i) => (
+          <div
+            key={i}
+            className="
+              bg-white rounded-[30px]
+              p-5 shadow-sm border border-[#f5f5f4]
+              flex items-center gap-4
+            "
+          >
+            <div
+              className={`
+                w-14 h-14 rounded-2xl
+                flex items-center justify-center
+                text-2xl shrink-0
+                ${card.bg}
+              `}
+            >
+              {card.icon}
+            </div>
+
+            <div>
+              <h3 className={`text-4xl font-extrabold ${card.color}`}>
+                {card.value}
+              </h3>
+
+              <p className="text-xs font-bold text-stone-400 mt-1">
+                {card.label}
+              </p>
+
+              <p className={`text-[11px] mt-1 font-semibold ${card.growthColor}`}>
+                {card.growth}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Table Section */}
-      <div className={`bg-white rounded-[2.5rem] shadow-xl shadow-amber-900/5 border border-amber-50 overflow-hidden ${HOVER_CARD}`}>
-        {/* Table toolbar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between p-6 gap-4 border-b border-stone-50">
-          <div className="relative w-full sm:w-auto">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">🔍</span>
+      {/* Table */}
+      <div
+        className="
+          bg-white rounded-[35px]
+          shadow-sm border border-[#f5f5f4]
+          overflow-hidden
+        "
+      >
+
+        {/* Toolbar */}
+        <div className="flex items-center justify-between p-6">
+
+          {/* Search */}
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
+              🔎
+            </span>
+
             <input
               placeholder="Cari nama atau menu..."
-              className="pl-11 pr-6 py-3 text-sm bg-stone-50 border-none rounded-2xl focus:ring-2 focus:ring-amber-200 w-full sm:w-80 placeholder:text-stone-400 font-medium transition-all"
+              className="
+                w-[260px]
+                bg-[#fafaf9]
+                border border-[#f5f5f4]
+                rounded-2xl
+                pl-11 pr-4 py-3
+                text-sm
+                focus:outline-none
+                focus:border-[#d97706]
+              "
             />
           </div>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <select className="flex-1 sm:flex-none text-sm border-none bg-stone-50 rounded-2xl px-4 py-3 text-stone-600 font-bold focus:ring-2 focus:ring-amber-200 cursor-pointer">
+
+          {/* Right Button */}
+          <div className="flex items-center gap-3">
+
+            <select
+              className="
+                bg-[#fafaf9]
+                border border-[#f5f5f4]
+                rounded-2xl
+                px-4 py-3
+                text-sm text-stone-600
+                focus:outline-none
+              "
+            >
               <option>Semua Status</option>
-              <option>Delivered</option>
-              <option>On Process</option>
             </select>
-            <button className="bg-[#78350f] hover:bg-[#451a03] text-white text-sm font-bold px-6 py-3 rounded-2xl transition-all shadow-lg shadow-amber-900/20 active:scale-95">
+
+            <button
+              className="
+                bg-[#92400e]
+                hover:bg-[#78350f]
+                text-white
+                px-6 py-3
+                rounded-2xl
+                text-sm font-bold
+                shadow-lg shadow-amber-900/10
+                transition-all
+              "
+            >
               + Pesanan Baru
             </button>
           </div>
         </div>
 
-        {/* Table Body */}
+        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
+
             <thead>
-              <tr className="bg-stone-50/50">
-                {['Order ID', 'Customer', 'Menu', 'Qty', 'Total', 'Status', 'Aksi'].map(h => (
-                  <th key={h} className="text-left text-[11px] font-black text-stone-400 uppercase tracking-[0.1em] px-6 py-4">
-                    {h}
+              <tr className="border-b border-[#f5f5f4]">
+
+                {[
+                  'ORDER ID',
+                  'CUSTOMER',
+                  'MENU',
+                  'QTY',
+                  'TOTAL',
+                  'STATUS',
+                  'AKSI',
+                ].map((head) => (
+                  <th
+                    key={head}
+                    className="
+                      text-left
+                      text-[11px]
+                      font-extrabold
+                      text-stone-400
+                      tracking-[1.5px]
+                      px-6 py-4
+                    "
+                  >
+                    {head}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-50">
+
+            <tbody>
+
               {ORDERS.map((o) => (
-                <tr key={o.id} className="hover:bg-amber-50/30 transition-colors group">
+                <tr
+                  key={o.id}
+                  className="
+                    border-b border-[#fafaf9]
+                    hover:bg-[#fafaf9]
+                    transition-all
+                    group
+                  "
+                >
+
+                  {/* Order ID */}
                   <td className="px-6 py-5">
-                    <span className="font-mono text-[11px] font-black text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">
-                      {o.id}
+                    <span
+                      className="
+                        text-[10px] font-bold
+                        text-[#b45309]
+                        bg-[#fffbeb]
+                        border border-[#fde68a]
+                        px-2.5 py-1 rounded-full
+                      "
+                    >
+                      {o.displayId}
                     </span>
                   </td>
+
+                  {/* Customer */}
                   <td className="px-6 py-5">
+
                     <div className="flex items-center gap-3">
+
                       <img
-                        src={`https://i.pravatar.cc/150?u=${o.avatar}`}
+                        src={`https://picsum.photos/seed/${o.avatar}/40/40`}
                         alt={o.customer}
-                        className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-110 transition-transform"
+                        className="
+                          w-10 h-10 rounded-full
+                          object-cover
+                        "
                       />
+
                       <div>
-                        <p className="text-sm font-bold text-stone-800">{o.customer}</p>
-                        <p className="text-[10px] text-stone-400 font-medium">{o.date}</p>
+                        <p className="text-sm font-bold text-stone-800">
+                          {o.customer}
+                        </p>
+
+                        <p className="text-[11px] text-stone-400">
+                          {o.date}
+                        </p>
                       </div>
                     </div>
                   </td>
+
+                  {/* Menu */}
                   <td className="px-6 py-5">
-                    <p className="text-sm text-stone-600 font-medium max-w-[200px] truncate">{o.item}</p>
+
+                   <Link to={`/products/${o.id}`}>
+                      {o.item}
+                    </Link>
                   </td>
+
+                  {/* Qty */}
                   <td className="px-6 py-5">
-                    <span className="text-xs font-black text-stone-500 bg-white border border-stone-100 px-2 py-1 rounded-md">
+
+                    <span
+                      className="
+                        bg-[#fafaf9]
+                        border border-[#f5f5f4]
+                        px-2 py-1
+                        rounded-lg
+                        text-xs font-bold
+                        text-stone-600
+                      "
+                    >
                       {o.qty}x
                     </span>
                   </td>
-                  <td className="px-6 py-5 text-sm font-black text-stone-900">{o.total}</td>
-                  <td className="px-6 py-5"><StatusBadge status={o.status} /></td>
+
+                  {/* Total */}
                   <td className="px-6 py-5">
-                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                      <button className="p-2 rounded-xl bg-stone-100 text-stone-500 hover:bg-amber-100 hover:text-amber-800 transition-colors">
-                         <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <p className="font-extrabold text-stone-900">
+                      {o.total}
+                    </p>
+                  </td>
+
+                  {/* Status */}
+                  <td className="px-6 py-5">
+                    <StatusBadge status={o.status} />
+                  </td>
+
+                  {/* Action */}
+                  <td className="px-6 py-5">
+
+                    <div
+                      className="
+                        flex items-center gap-2
+                        opacity-0 group-hover:opacity-100
+                        transition-all
+                      "
+                    >
+
+                      <button
+                        className="
+                          w-8 h-8 rounded-xl
+                          hover:bg-[#fef3c7]
+                          text-[#b45309]
+                          flex items-center justify-center
+                        "
+                      >
+                        👁
                       </button>
-                      <button className="p-2 rounded-xl bg-stone-100 text-stone-500 hover:bg-emerald-100 hover:text-emerald-800 transition-colors">
-                         <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+
+                      <button
+                        className="
+                          w-8 h-8 rounded-xl
+                          hover:bg-[#fde68a]
+                          text-[#92400e]
+                          flex items-center justify-center
+                        "
+                      >
+                        ✏
+                      </button>
+
+                      <button
+                        className="
+                          w-8 h-8 rounded-xl
+                          hover:bg-red-50
+                          text-red-400
+                          flex items-center justify-center
+                        "
+                      >
+                        🗑
                       </button>
                     </div>
+
                   </td>
                 </tr>
               ))}
+
             </tbody>
           </table>
         </div>
 
-        {/* Pagination yang lebih 'Clean' */}
-        <div className="flex flex-col sm:flex-row items-center justify-between px-8 py-6 bg-stone-50/30 gap-4">
-          <p className="text-xs text-stone-400 font-bold uppercase tracking-wider">
-            Menampilkan <span className="text-stone-800">1–8</span> dari <span className="text-stone-800">357</span> Pesanan
+        {/* Footer */}
+        <div
+          className="
+            flex items-center justify-between
+            px-6 py-4
+            border-t border-[#f5f5f4]
+          "
+        >
+
+          <p className="text-xs text-stone-400">
+            Menampilkan <span className="font-bold text-stone-700">1–7</span> dari{' '}
+            <span className="font-bold text-stone-700">357</span> pesanan
           </p>
+
           <div className="flex items-center gap-2">
+
             {['‹', '1', '2', '3', '›'].map((p, i) => (
-              <button key={i} className={`w-10 h-10 rounded-xl text-xs font-black transition-all shadow-sm
-                ${p === '1' ? 'bg-[#78350f] text-white' : 'bg-white text-stone-400 hover:bg-amber-50 hover:text-amber-800'}`}>
+              <button
+                key={i}
+                className={`
+                  w-9 h-9 rounded-xl text-sm font-bold
+                  transition-all
+                  ${
+                    p === '1'
+                      ? 'bg-[#92400e] text-white'
+                      : 'text-stone-500 hover:bg-[#fafaf9]'
+                  }
+                `}
+              >
                 {p}
               </button>
             ))}
+
           </div>
         </div>
       </div>
