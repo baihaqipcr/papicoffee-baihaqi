@@ -1,16 +1,18 @@
 ﻿import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import './assets/tailwind.css';
 import Loading from './components/Loading';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';  
+
 
 // --- Import Halaman Menggunakan React.lazy ---
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const OrderList = React.lazy(() => import('./pages/OrderList'));
 const Customer  = React.lazy(() => import('./pages/Customer'));
+const ProductDetail  = React.lazy(() => import('./pages/ProductDetail'));
 
 const Login    = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
@@ -31,6 +33,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/orders" element={<OrderList />} />
             <Route path="/customers" element={<Customer />} />
+            <Route path="/orders/:id" element={<ProductDetail />} />
           </Route>
 
           {/* Layout Auth (Tanpa Sidebar) */}
