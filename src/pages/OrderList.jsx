@@ -6,13 +6,13 @@ import PageHeader from '../components/PageHeader'
 import { Link } from 'react-router-dom'
 
 const ORDERS = [
-  { id: 1, displayId: '#ORD-001', customer: 'Jons Sena',      item: 'Pistachio Latte',        qty: 2, total: 'Rp 85.000',  status: 'Delivered',  date: '12 Jan 2025', avatar: 'jons' },
-  { id: 2, displayId: '#ORD-002', customer: 'Sofia Amalia',   item: 'Caramel Latte',          qty: 1, total: 'Rp 45.000',  status: 'On Process', date: '12 Jan 2025', avatar: 'sofia' },
-  { id: 3, displayId: '#ORD-003', customer: 'Budi Santoso',   item: 'Kopapi Susu',            qty: 3, total: 'Rp 120.000', status: 'Delivered',  date: '11 Jan 2025', avatar: 'budi' },
-  { id: 4, displayId: '#ORD-004', customer: 'Anandreansyah',  item: 'Macchiato',              qty: 1, total: 'Rp 75.000',  status: 'Cancelled',  date: '11 Jan 2025', avatar: 'anand' },
-  { id: 5, displayId: '#ORD-005', customer: 'Rina Kusuma',    item: 'Matcha Latte XL',        qty: 2, total: 'Rp 56.000',  status: 'On Process', date: '10 Jan 2025', avatar: 'rina' },
-  { id: 6, displayId: '#ORD-006', customer: 'Doni Prasetyo',  item: 'Vanilla Latte',          qty: 4, total: 'Rp 96.000',  status: 'Delivered',  date: '10 Jan 2025', avatar: 'doni' },
-  { id: 7, displayId: '#ORD-007', customer: 'Mega Wulandari', item: 'Red Velvet Frappuccino', qty: 1, total: 'Rp 65.000',  status: 'Delivered',  date: '09 Jan 2025', avatar: 'mega' },
+  { id: 1, displayId: '#ORD-001', customer: 'Jons Sena', item: 'Pistachio Latte', qty: 2, total: 'Rp 85.000', status: 'Delivered', date: '12 Jan 2025', avatar: 'jons' },
+  { id: 2, displayId: '#ORD-002', customer: 'Sofia Amalia', item: 'Caramel Latte', qty: 1, total: 'Rp 45.000', status: 'On Process', date: '12 Jan 2025', avatar: 'sofia' },
+  { id: 3, displayId: '#ORD-003', customer: 'Budi Santoso', item: 'Kopapi Susu', qty: 3, total: 'Rp 120.000', status: 'Delivered', date: '11 Jan 2025', avatar: 'budi' },
+  { id: 4, displayId: '#ORD-004', customer: 'Anandreansyah', item: 'Macchiato', qty: 1, total: 'Rp 75.000', status: 'Cancelled', date: '11 Jan 2025', avatar: 'anand' },
+  { id: 5, displayId: '#ORD-005', customer: 'Rina Kusuma', item: 'Matcha Latte XL', qty: 2, total: 'Rp 56.000', status: 'On Process', date: '10 Jan 2025', avatar: 'rina' },
+  { id: 6, displayId: '#ORD-006', customer: 'Doni Prasetyo', item: 'Vanilla Latte', qty: 4, total: 'Rp 96.000', status: 'Delivered', date: '10 Jan 2025', avatar: 'doni' },
+  { id: 7, displayId: '#ORD-007', customer: 'Mega Wulandari', item: 'Red Velvet Frappuccino', qty: 1, total: 'Rp 65.000', status: 'Delivered', date: '09 Jan 2025', avatar: 'mega' },
 ]
 
 const STATUS_STYLE = {
@@ -295,8 +295,37 @@ export default function OrderList() {
                   {/* Menu */}
                   <td className="px-6 py-5">
 
-                   <Link to={`/products/${o.id}`}>
-                      {o.item}
+                    <Link
+                      to={`/products/${o.id}`}
+                      className="
+    group inline-flex items-center gap-2
+    text-[#8b4513] hover:text-[#6f360f]
+    font-semibold transition-all duration-200
+  "
+                    >
+                      <span
+                        className="
+      relative
+      after:absolute after:left-0 after:-bottom-1
+      after:h-[2px] after:w-0
+      after:bg-[#8b4513]
+      after:transition-all after:duration-300
+      group-hover:after:w-full
+    "
+                      >
+                        {o.item}
+                      </span>
+
+                      <span
+                        className="
+      opacity-0 -translate-x-1
+      group-hover:opacity-100 group-hover:translate-x-0
+      transition-all duration-200
+      text-sm
+    "
+                      >
+                        ☕
+                      </span>
                     </Link>
                   </td>
 
@@ -404,10 +433,9 @@ export default function OrderList() {
                 className={`
                   w-9 h-9 rounded-xl text-sm font-bold
                   transition-all
-                  ${
-                    p === '1'
-                      ? 'bg-[#92400e] text-white'
-                      : 'text-stone-500 hover:bg-[#fafaf9]'
+                  ${p === '1'
+                    ? 'bg-[#92400e] text-white'
+                    : 'text-stone-500 hover:bg-[#fafaf9]'
                   }
                 `}
               >
