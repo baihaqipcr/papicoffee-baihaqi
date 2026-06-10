@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Arabica Espresso",
+    "category": "Kopi",
+    "price": "Rp 35.000",
+    "description": "Kopi espresso murni dari biji arabica pilihan Indonesia.",
+    "image": "arabica"
+  },
+  {
+    "id": 2,
+    "name": "Pistachio Latte",
+    "category": "Kopi",
+    "price": "Rp 42.000",
+    "description": "Latte creamy dengan flavor kental pistachio yang unik.",
+    "image": "pistachio"
+  },
+  {
+    "id": 3,
+    "name": "Caramel Macchiato",
+    "category": "Kopi",
+    "price": "Rp 45.000",
+    "description": "Espresso dengan susu hangat dan topping caramel yang lezat.",
+    "image": "caramel"
+  },
+  {
+    "id": 4,
+    "name": "Vanilla Latte",
+    "category": "Kopi",
+    "price": "Rp 40.000",
+    "description": "Latte premium dengan essence vanilla alami yang smooth.",
+    "image": "vanilla"
+  },
+  {
+    "id": 5,
+    "name": "Matcha Latte",
+    "category": "Minuman",
+    "price": "Rp 48.000",
+    "description": "Teh hijau organik Matcha dengan susu yang creamy.",
+    "image": "matcha"
+  },
+  {
+    "id": 6,
+    "name": "Cold Brew",
+    "category": "Kopi",
+    "price": "Rp 38.000",
+    "description": "Kopi dingin yang diseduh selama 12 jam untuk rasa yang smooth.",
+    "image": "coldbrew"
+  },
+  {
+    "id": 7,
+    "name": "Iced Mocha",
+    "category": "Kopi",
+    "price": "Rp 50.000",
+    "description": "Perpaduan sempurna antara espresso, cokelat, dan susu dingin.",
+    "image": "mocha"
+  },
+  {
+    "id": 8,
+    "name": "Strawberry Smoothie",
+    "category": "Minuman",
+    "price": "Rp 45.000",
+    "description": "Minuman segar dari strawberry organik dengan yogurt.",
+    "image": "strawberry"
+  },
+  {
+    "id": 9,
+    "name": "Chocolate Brownies",
+    "category": "Makanan",
+    "price": "Rp 35.000",
+    "description": "Brownies cokelat premium yang moist dan delicious.",
+    "image": "brownies"
+  },
+  {
+    "id": 10,
+    "name": "Croissant Butter",
+    "category": "Makanan",
+    "price": "Rp 32.000",
+    "description": "Croissant lembut berlapis dengan butter premium Perancis.",
+    "image": "croissant"
+  },
+  {
+    "id": 11,
+    "name": "Cheesecake Slice",
+    "category": "Makanan",
+    "price": "Rp 55.000",
+    "description": "Potongan cheesecake New York dengan topping buah segar.",
+    "image": "cheesecake"
+  },
+  {
+    "id": 12,
+    "name": "Avocado Toast",
+    "category": "Makanan",
+    "price": "Rp 48.000",
+    "description": "Roti panggang dengan alpukat segar, telur, dan biji-bijian.",
+    "image": "avocado"
+  }
+]

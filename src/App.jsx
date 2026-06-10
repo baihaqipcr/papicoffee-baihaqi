@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const OrderList = React.lazy(() => import('./pages/OrderList'));
 const Customer  = React.lazy(() => import('./pages/Customer'));
+const Menu = React.lazy(() => import('./pages/Menu'));
 const ProductDetail  = React.lazy(() => import('./pages/ProductDetail'));
 
 const Login    = React.lazy(() => import('./pages/auth/Login'));
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/orders" element={<OrderList />} />
             <Route path="/customers" element={<Customer />} />
+            <Route path="/menu" element={<Menu />} />
             <Route path="/products/:id" element={<ProductDetail />} />
           </Route>
 
