@@ -4,7 +4,7 @@
  * Menggunakan shadcn/ui components
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PageHeader from '../components/PageHeader'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -112,6 +112,28 @@ function FilterTab({ label, active, onClick }) {
 /* ── Main Component ── */
 export default function Menu() {
   const [selectedCategory, setSelectedCategory] = useState('Semua')
+
+  // ── useEffect 1: Load kategori dari localStorage saat component mount ──
+  useEffect(() => {
+    const savedCategory = localStorage.getItem('selectedMenuCategory')
+    if (savedCategory) {
+      setSelectedCategory(savedCategory)
+    }
+  }, [])
+
+  // ── useEffect 2: Simpan kategori ke localStorage ketika kategori berubah ──
+  useEffect(() => {
+    localStorage.setItem('selectedMenuCategory', selectedCategory)
+  }, [selectedCategory])
+
+  // ── useEffect 3: Update document title berdasarkan kategori yang dipilih ──
+  useEffect(() => {
+    if (selectedCategory === 'Semua') {
+      document.title = 'Menu - Papi Coffee'
+    } else {
+      document.title = `Menu ${selectedCategory} - Papi Coffee`
+    }
+  }, [selectedCategory])
 
   const categories = ['Semua', 'Kopi', 'Minuman', 'Makanan']
   const filteredItems = selectedCategory === 'Semua' 

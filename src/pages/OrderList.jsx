@@ -4,6 +4,7 @@
  * Semua sub-komponen diimpor dari /src/components/order/
  */
 
+import { useRef } from 'react'
 import PageHeader from '../components/PageHeader'
 import SummaryCards from '../components/order/SummaryCards'
 import TableToolbar from '../components/order/TableToolbar'
@@ -22,6 +23,8 @@ const ORDERS = [
 ]
 
 export default function OrderList() {
+  const tableWrapperRef = useRef(null)
+
   return (
     <div className="space-y-6">
 
@@ -49,7 +52,7 @@ export default function OrderList() {
         <TableToolbar />
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" ref={tableWrapperRef}>
           <table className="w-full">
             <OrderTableHeader />
             <OrderTableBody orders={ORDERS} />
