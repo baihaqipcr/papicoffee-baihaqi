@@ -1,17 +1,72 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BsFillExclamationDiamondFill } from 'react-icons/bs';
 import { ImSpinner2 } from 'react-icons/im';
+import Loading from '../../components/Loading';
+import { supabase } from '../../lib/supabase';
 
 export default function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [checkingAuth, setCheckingAuth] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [dataForm, setDataForm] = useState({
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     });
+
+    useEffect(() => {
+        if (location.state?.registeredMessage) {
+            setSuccess(location.state.registeredMessage);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        let mounted = true;
+
+        const checkSession = async () => {
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (!mounted) return;
+                if (error) {
+                    console.warn('Supabase session error:', error.message);
+                    setCheckingAuth(false);
+                    return;
+                }
+                if (data?.session) {
+                    navigate('/', { replace: true });
+                } else {
+                    setCheckingAuth(false);
+                }
+            } catch (err) {
+                if (!mounted) return;
+                console.warn('Session check failed:', err);
+                setCheckingAuth(false);
+            }
+        };
+
+        checkSession();
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (!mounted) return;
+            if (session) {
+                navigate('/', { replace: true });
+            } else {
+                setCheckingAuth(false);
+            }
+        });
+
+        return () => {
+            mounted = false;
+            listener?.subscription?.unsubscribe();
+        };
+    }, [navigate]);
+
+    if (checkingAuth) {
+        return <Loading />;
+    }
 
     const handleChange = (evt) => {
         const { name, value } = evt.target;
@@ -25,42 +80,44 @@ export default function Login() {
         e.preventDefault();
 
         if (!dataForm.email || !dataForm.password) {
-            setError("Username dan password wajib diisi");
+            setError('Email dan password wajib diisi');
             return;
         }
 
         setLoading(true);
-        setError(false);
+        setError('');
+        setSuccess('');
 
-        axios
-            .post("https://dummyjson.com/user/login", {
-                username: dataForm.email,
-                password: dataForm.password,
-            })
-            .then((response) => {
-                if (response.status !== 200) {
-                    setError(response.data.message);
-                    return;
-                }
-                // Redirect ke dashboard jika login sukses
-                navigate("/");
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setError(err.response.data.message || "Kredensial tidak valid");
-                } else {
-                    setError(err.message || "Terjadi kesalahan sistem");
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: dataForm.email,
+            password: dataForm.password,
+        });
+
+        if (error) {
+            setError(error.message || 'Kredensial tidak valid');
+            setLoading(false);
+            return;
+        }
+
+        if (data?.session) {
+            navigate('/', { replace: true });
+        } else {
+            setError('Tidak dapat mengautentikasi. Silakan coba lagi.');
+        }
+
+        setLoading(false);
     };
 
     const errorInfo = error ? (
         <div className="bg-red-50 border-l-4 border-red-500 mb-6 p-4 text-sm text-red-700 rounded-r-lg shadow-sm flex items-center">
             <BsFillExclamationDiamondFill className="text-red-500 me-3 text-xl shrink-0" />
             <span className="font-medium">{error}</span>
+        </div>
+    ) : null;
+
+    const successInfo = success ? (
+        <div className="bg-green-50 border-l-4 border-green-500 mb-6 p-4 text-sm text-green-700 rounded-r-lg shadow-sm flex items-center">
+            <span className="font-medium">{success}</span>
         </div>
     ) : null;
 
@@ -123,15 +180,16 @@ export default function Login() {
                     </div>
 
                     {errorInfo}
+                    {successInfo}
                     {loadingInfo}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm font-semibold text-stone-700 mb-2">
-                                Email Address / Username
+                                Email Address
                             </label>
                             <input
-                                type="text"
+                                type="email"
                                 id="email"
                                 name="email"
                                 value={dataForm.email}
@@ -139,7 +197,7 @@ export default function Login() {
                                 className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl shadow-sm
                                     focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-transparent transition-all duration-200
                                     placeholder-stone-400 text-stone-800"
-                                placeholder="Masukkan email atau username"
+                                placeholder="Masukkan email Anda"
                             />
                         </div>
                         

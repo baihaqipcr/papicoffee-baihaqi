@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 /* ── Icon helpers ──────────────────────────────────── */
 const MenuIcon = () => (
@@ -46,6 +48,28 @@ function IconBtn({ children, badgeText = null }) {
 
 export default function Header() {
     const [search, setSearch] = useState('')
+    const [user, setUser] = useState(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const loadSession = async () => {
+            const { data } = await supabase.auth.getSession()
+            setUser(data?.session?.user ?? null)
+        }
+
+        loadSession()
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null)
+        })
+
+        return () => listener?.subscription?.unsubscribe()
+    }, [])
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        navigate('/login', { replace: true })
+    }
 
     return (
         <header className="h-20 bg-[#f4f4f5] flex items-center justify-between px-8 shrink-0 relative">
@@ -75,28 +99,32 @@ export default function Header() {
             </div>
 
             {/* Right: Actions & Profile */}
-            <div className="flex items-center gap-6">
-                {/* Notification Icons */}
+            <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
                     <IconBtn badgeText="18"><ChatIcon /></IconBtn>
                     <IconBtn badgeText="52"><BellIcon /></IconBtn>
                 </div>
 
-                {/* User Profile */}
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-2xl bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#78350f] shadow-sm transition hover:bg-[#f59e0b]/10"
+                >
+                    Logout
+                </button>
+
                 <button className="flex items-center gap-3 hover:bg-white/50 p-1.5 pr-3 rounded-full transition-all">
-                    {/* Avatar */}
                     <div className="w-12 h-12 rounded-full bg-stone-300 border-2 border-white shadow-sm overflow-hidden shrink-0">
                         <img
                             src="https://generationiron.com/wp-content/uploads/2021/08/header-22-1024x543.jpg"
-                            alt="Baihaqi"
+                            alt={user?.email ?? 'Papi Coffee'}
                             className="w-full h-full object-cover"
                             onError={e => { e.target.style.display = 'none' }}
                         />
                     </div>
-                    {/* Info */}
                     <div className="text-left">
-                        <p className="text-sm font-bold text-stone-900 leading-none mb-1">Baihaqi</p>
-                        <p className="text-[12px] text-stone-500 font-medium leading-none">Barista</p>
+                        <p className="text-sm font-bold text-stone-900 leading-none mb-1">{user?.email ?? 'Barista'}</p>
+                        <p className="text-[12px] text-stone-500 font-medium leading-none">{user ? 'Signed in' : 'Guest'}</p>
                     </div>
                 </button>
             </div>

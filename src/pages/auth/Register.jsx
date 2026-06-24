@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 
 export default function Register() {
     const navigate = useNavigate();
     const [dataForm, setDataForm] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
+        email: '',
+        password: '',
+        confirmPassword: '',
     });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (evt) => {
         const { name, value } = evt.target;
@@ -17,11 +20,55 @@ export default function Register() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: Add registration logic
-        console.log(dataForm);
-        navigate("/login");
+        setError('');
+
+        if (!dataForm.email || !dataForm.password || !dataForm.confirmPassword) {
+            setError('Semua field wajib diisi.');
+            return;
+        }
+
+        if (dataForm.password !== dataForm.confirmPassword) {
+            setError('Password dan konfirmasi password harus sama.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email: dataForm.email,
+                password: dataForm.password,
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            if (data?.user) {
+                const { error: profileError } = await supabase.from('profiles').insert([
+                    {
+                        id: data.user.id,
+                        email: dataForm.email,
+                    },
+                ]);
+
+                if (profileError) {
+                    console.warn('Profile insert error:', profileError.message);
+                }
+            }
+
+            navigate('/login', {
+                state: {
+                    registeredMessage: 'Akun berhasil dibuat. Silakan login menggunakan email dan password Anda.',
+                },
+            });
+        } catch (err) {
+            setError(err.message || 'Terjadi kesalahan saat mendaftar.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -74,6 +121,12 @@ export default function Register() {
                         <h3 className="text-2xl font-bold text-stone-800">Daftar Akun Baru 📝</h3>
                         <p className="text-stone-500 text-sm mt-2">Buat akun Anda sekarang untuk bergabung menjadi bagian dari tim barista kami.</p>
                     </div>
+
+                    {error && (
+                        <div className="bg-red-50 border-l-4 border-red-500 mb-6 p-4 text-sm text-red-700 rounded-r-lg shadow-sm">
+                            <span className="font-medium">{error}</span>
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
@@ -133,10 +186,11 @@ export default function Register() {
                         <div className="pt-2">
                             <button
                                 type="submit"
+                                disabled={loading}
                                 className="w-full bg-[#f59e0b] hover:bg-[#fbbf24] text-stone-900 font-bold py-3.5 px-4
-                                    rounded-xl shadow-md shadow-amber-200 transition-all duration-300 transform hover:-translate-y-0.5"
+                                    rounded-xl shadow-md shadow-amber-200 transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
-                                Daftar Sekarang
+                                {loading ? 'Memproses...' : 'Daftar Sekarang'}
                             </button>
                         </div>
                     </form>
