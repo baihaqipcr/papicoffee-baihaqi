@@ -1,20 +1,32 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 
 export default function Forgot() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // TODO: Add reset logic
-        setTimeout(() => {
-            setMessage("Link reset password telah dikirim ke email Anda");
+        setError("");
+        setMessage("");
+
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/login`,
+        });
+
+        if (error) {
+            setError(error.message || 'Gagal mengirim email reset password. Silakan coba lagi.');
             setLoading(false);
-        }, 1000);
+            return;
+        }
+
+        setMessage('Link reset password telah dikirim ke email Anda. Periksa inbox Anda segera.');
+        setLoading(false);
     };
 
     return (

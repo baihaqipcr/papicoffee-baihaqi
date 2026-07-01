@@ -13,6 +13,7 @@ const OrderList = React.lazy(() => import('./pages/OrderList'));
 const Customer = React.lazy(() => import('./pages/Customer'));
 const Menu = React.lazy(() => import('./pages/Menu'));
 const ProductDetail = React.lazy(() => import('./pages/ProductDetail'));
+const Inventory = React.lazy(() => import('./pages/Inventory'));
 
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="/orders" element={<OrderList />} />
             <Route path="/customers" element={<Customer />} />
             <Route path="/menu" element={<Menu />} />
+            <Route path="/inventory" element={<Inventory />} />
             <Route path="/products/:id" element={<ProductDetail />} />
           </Route>
 
